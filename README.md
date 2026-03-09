@@ -50,34 +50,28 @@ Before running Terraform, configure AWS credentials using one of these methods:
 
 ### Option A: AWS SSO (recommended for Confluent employees)
 
-bash
+```bash
 aws sso login --profile your-profile-name
 export AWS_PROFILE=your-profile-name
 
 ### Option B: IAM Access Keys
-
-bash
+```bash
 aws configure
 Enter: AWS Access Key ID, Secret Access Key, region (us-east-1)
 
 ### Option C: Environment Variables
-
-bash
+```bash
 export AWS_ACCESS_KEY_ID="AKIAXXXXXXXXXX"
 export AWS_SECRET_ACCESS_KEY="xxxxxxxxxxxxxxxxxxxxxxxx"
 export AWS_DEFAULT_REGION="us-east-1"
 
 ### Verify credentials work
-
-bash
-aws sts get-caller-identity
+```bashaws sts get-caller-identity
 
 You should see your Account ID and ARN.
 
 ## Quick Start
-
-bash
-1. Clone
+```bash1. Clone
 git clone git@github.com:vj-beep/CFLT-Terraform.git
 cd CFLT-Terraform
 
@@ -99,8 +93,7 @@ terraform output
 
 
 ## terraform.tfvars Reference
-
-hcl
+```hcl
 AWS
 vpc_name_east    = "east"
 vpc_name_west    = "west"
@@ -154,14 +147,14 @@ Cloud9 is needed for testing produce/consume because the Kafka clusters are behi
 
 ### Step 1: Open Cloud9
 
-bash
+```bash
 terraform output cloud9_url
 
 Copy the URL and open it in your browser.
 
 ### Step 2: Install Confluent CLI (inside Cloud9 terminal)
 
-bash
+```bash
 curl -sL --http1.1  https://cnfl.io/cli | sh -s -- latest
 export PATH="$HOME/bin:$PATH"
 echo 'export PATH="$HOME/bin:$PATH"' 
@@ -170,12 +163,12 @@ confluent version
 
 ### Step 3: Log in to Confluent Cloud
 
-bash
+```bash
 confluent login
 
 ### Step 4: Produce to East cluster
 
-bash
+```bash
 Get values from: terraform output (on your original machine)
 confluent kafka topic produce orders_east 
   --environment env-XXXXX 
@@ -186,7 +179,7 @@ confluent kafka topic produce orders_east
 
 Type test messages:
 
-json
+```json
 {"number":1,"date":18500,"shipping_address":"899 W Evelyn Ave, Mountain View, CA","cost":15.00}
 {"number":2,"date":18501,"shipping_address":"1 Bedford St, London WC2E 9HG, UK","cost":5.00}
 
@@ -195,7 +188,7 @@ Press `Ctrl+C` when done.
 
 ### Step 5: Consume mirror from West cluster (proves replication)
 
-bash
+```bash
 Use WEST cluster ID and WEST API keys
 confluent kafka topic consume orders_east 
   --from-beginning 
@@ -211,7 +204,7 @@ The topic name `orders_east` on the west cluster is the **mirror topic** — you
 
 Save this as `test.sh` in Cloud9 and fill in your values:
 
-bash
+```bash
 #!/bin/bash
 ENV_ID="env-XXXXX"
 EAST_ID="lkc-XXXXX"
@@ -241,7 +234,7 @@ confluent kafka topic consume orders_east
   --api-key $WEST_KEY --api-secret $WEST_SECRET
 
 
-bash
+```bash
 chmod +x test.sh
 ./test.sh
 
@@ -316,7 +309,7 @@ $ |
 
 For CI/CD pipelines:
 
-bash
+```bash
 export TF_VAR_confluent_cloud_api_key="$VAULT_KEY"
 export TF_VAR_confluent_cloud_api_secret="$VAULT_SECRET"
 
@@ -324,7 +317,7 @@ For production, use HashiCorp Vault or AWS Secrets Manager.
 
 ## Teardown
 
-bash
+```bash
 terraform destroy
 
 ## Where to Run What
