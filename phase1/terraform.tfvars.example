@@ -1,36 +1,36 @@
-# Copy to terraform.tfvars and fill in values.
-# NEVER commit terraform.tfvars to version control.
+# ─────────────────────────────────────────────────────────────
+# terraform.tfvars
+# NEVER commit this file to version control.
+# ─────────────────────────────────────────────────────────────
 
-# AWS
-vpc_name_east    = "aa-mr-pl-demo-east"
-vpc_name_west    = "aa-mr-pl-demo-west"
-vpc_tag          = "aa-mr-pl-demo"
+# ── AWS Networking ──
+vpc_name_east = "aa-mr-pl-east"
+vpc_name_west = "aa-mr-pl-west"
+vpc_tag       = "aa-mr-pl"
 
-# Cloud9
-cloud9_name      = "aa-mr-pl-demo-jumpbox"
-# update with the AWS pricipal you log into the console with
-disable_managed_creds = false
-cloud9_owner_arn = "arn:aws:sts::123456789012:assumed-role/YourRole/user@example.com"
+# ── Cloud9 Workstation ──
+cloud9_name      = "aa-mr-pl-c9-jumpboz"
+cloud9_disable_managed_creds = false
+cloud9_owner_arn = "arn:aws:sts::829250931565:assumed-role/AWSReservedSSO_nonprod-administrator_ff555b249eb304bc/vjeevaraj@confluent.io"
 cloud9_disk_size = 500
-# cloud9_instance_type = "t3.small"
+# cloud9_instance_type = "t3.small"   # default, uncomment to change
 
-# Confluent Cloud
-# Create API key at: https://confluent.cloud/settings/api-keys
+# ── Confluent Cloud Credentials ──
 confluent_cloud_api_key    = ""
 confluent_cloud_api_secret = ""
-# Get account ID: aws sts get-caller-identity --query Account --output text
-aws_account_id             = "123456789012"
+aws_account_id = "123445678"
 
-environment_name     = "aa-mr-pl-demo-env"
+# ── Kafka Clusters ──
+environment_name     = "aa-mr-pl-env"
 
-# Kafka Clusters
 cluster_type         = "DEDICATED"
 cluster_name_east    = "core-app-east"
 cluster_name_west    = "core-app-west"
 cluster_availability = "SINGLE_ZONE"
 cluster_cku          = 1
 
-# Topics
+# ── Topics ──
 topic_name_east       = "orders_east"
 topic_name_west       = "orders_west"
+topic_partitions      = 3
 consumer_group_prefix = "orders-consumer"
