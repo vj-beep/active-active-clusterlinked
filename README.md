@@ -5,41 +5,8 @@ architecture on Confluent Cloud with AWS PrivateLink, including all underlying
 AWS networking and a Cloud9 workstation.
 
 ## Architecture
-Confluent Cloud
-+--------------------------------------------------+
-|                 Environment                      |
 
-
-|              (vj-aa-linkedpl)                     |
-|                                                  |
-|  +----------------+       +----------------+     |
-|  |  East Cluster   |<-CL-->|  West Cluster   |   |
-|  |  (DEDICATED)    |       |  (DEDICATED)    |   |
-
-
-|  |  us-east-1      |       |  us-west-2      |   |
-|  |                 |       |                 |   |
-|  |  orders_east ---mirror--> orders_east     |   |
-|  |  orders_west <-mirror--- orders_west     |   |
-|  +--------+--------+       +--------+--------+   |
-|           | Network Link            | Network Link|
-+-----------+-------------------------+-------------+
-|                         |
-+-----------+-------------------------+-------------+
-|           |       AWS Account       |             |
-|  +--------+--------+       +--------+--------+   |
-|  |  East VPC       |       |  West VPC       |   |
-|  |  10.0.0.0/16    |<-PCX-->|  10.1.0.0/16    |   |
-|  |  +-----------+  |       | +-----------+  |   |
-|  |  |PrivateLink|  |       | |PrivateLink|  |   |
-|  |  |VPC Endpt  |  |       | |VPC Endpt  |  |   |
-|  |  +-----------+  |       | +-----------+  |   |
-|  |  +-----------+  |       +----------------+   |
-|  |  |  Cloud9   |  |                             |
-|  |  |  (SSM)    |  |                             |
-|  |  +-----------+  |                             |
-|  +----------------+                             |
-+--------------------------------------------------+
+![Multi-Region Active-Active Kafka Architecture](architecture.png)
 
 ## Two-Phase Deployment
 
@@ -123,7 +90,7 @@ Step 2 - In Cloud9 terminal, clone the repo:
     git clone git@github.com:vj-beep/CFLT-Terraform.git
     cd CFLT-Terraform
 
-Step 3 - Install tools (first time only):
+Step 3 - Install tools and disable managed credentials (first time only):
 
     bash scripts/cloud9_setup.sh
 
@@ -133,11 +100,15 @@ Step 4 - Copy phase2.env from your Mac to Cloud9:
     #   terraform output -raw phase2_env > ../scripts/phase2.env
     # Copy scripts/phase2.env to the Cloud9 scripts/ directory
 
-Step 5 - Run Phase 2:
+Step 5 - Log in to Confluent Cloud:
+
+    confluent login
+
+Step 6 - Run Phase 2:
 
     bash scripts/phase2.sh
 
-Step 6 - Test replication:
+Step 7 - Test replication:
 
     bash scripts/test_replication.sh
 
@@ -153,6 +124,7 @@ Step 6 - Test replication:
     cloud9_owner_arn = "arn:aws:sts::123456789012:assumed-role/YourRole/user"
     cloud9_iam_role  = "EC2TerraformAdminRole"
     cloud9_disk_size = 500
+    cloud9_disable_managed_creds = false
 
     # Confluent Cloud
     confluent_cloud_api_key    = ""
@@ -169,9 +141,6 @@ Step 6 - Test replication:
     topic_name_east       = "orders_east"
     topic_name_west       = "orders_west"
     consumer_group_prefix = "orders-consumer"
-
-    # Set to false to skip disabling Cloud9 managed credentials
-    cloud9_disable_managed_creds = false
 
 ## File Structure
 
@@ -198,53 +167,30 @@ Step 6 - Test replication:
         aws-privatelink/         Reusable PrivateLink module
 
     scripts/
-      cloud9_setup.sh            Install Terraform + Confluent CLI + jq
+      cloud9_setup.sh            Disable managed creds, install tools
       phase2.sh                  Create topics, cluster links, mirror topics
       test_replication.sh        Produce to East, consume mirror from West
       teardown.sh                Delete Phase 2 resources
       phase2.env                 Generated - contains all IDs and secrets
 
-## What Phase 1 Creates
+## What Phase 1 Creates (~107 resources)
 
-    AWS VPCs (32 resources)
-      2 VPCs, 12 subnets, 2 IGWs, 2 NATs, 4 route tables
+    AWS VPCs (32)           2 VPCs, 12 subnets, 2 IGWs, 2 NATs, 4 route tables
+    VPC Peering (10)        Peering, accepter, DNS options, 4 routes, 2 SG rules
+    Cloud9 (13)             Environment, 3 SSM endpoints, 2 SGs, IAM profile
+    Confluent Env (5)       Environment, 2 networks, 2 PrivateLink access grants
+    Kafka Clusters (2)      2 DEDICATED clusters (1 CKU each)
+    AWS PrivateLink (14)    2 SGs, 2 VPC endpoints, 2 Route53 zones, 6 DNS records
+    DNS Associations (2)    2 Route53 zone associations
+    Network Links (4)       2 services, 2 endpoints
+    RBAC (14)               4 service accounts, 8 role bindings, 1 time_sleep
+    API Keys (10)           10 scoped API keys
 
-    VPC Peering (10 resources)
-      Peering connection, accepter, DNS options, 4 routes, 2 SG rules
+## What Phase 2 Creates (via CLI, 6 resources)
 
-    Cloud9 (13 resources)
-      Environment, 3 SSM endpoints, 2 SGs, IAM profile, null_resources
-
-    Confluent Environment (5 resources)
-      Environment, 2 networks, 2 PrivateLink access grants
-
-    Kafka Clusters (2 resources)
-      2 DEDICATED clusters (1 CKU each)
-
-    AWS PrivateLink (14 resources)
-      2 SGs, 2 VPC endpoints, 2 Route53 zones, 6 DNS records
-
-    Cross-Region DNS (2 resources)
-      2 Route53 zone associations
-
-    Network Links (4 resources)
-      2 services, 2 endpoints
-
-    RBAC (14 resources)
-      4 service accounts, 8 role bindings, 1 time_sleep
-
-    API Keys (10 resources)
-      10 scoped API keys
-
-    Phase 1 Total: ~107 resources
-
-## What Phase 2 Creates (via CLI)
-
-    2 Kafka topics (orders_east, orders_west)
-    2 Cluster links (east-to-west, west-to-east)
-    2 Mirror topics (bidirectional)
-
-    Phase 2 Total: 6 resources
+    2 Kafka topics          orders_east, orders_west
+    2 Cluster links         east-to-west, west-to-east
+    2 Mirror topics         Bidirectional replication
 
 ## Cluster Types
 
@@ -281,6 +227,10 @@ Step 6 - Test replication:
       Topics, cluster links, mirror topics need PrivateLink access
       Simpler than managing separate Terraform state
 
+    Cloud9 setup disables managed credentials
+      Writes settings file + removes cached credentials
+      Ensures custom IAM role is used instead
+
 ## Troubleshooting
 
     No valid credential sources found
@@ -294,10 +244,13 @@ Step 6 - Test replication:
 
     no matching EC2 Instance found
       Cloud9 instance not running yet. Re-run terraform apply
-      (time_sleep handles this on fresh deploys)
 
     for_each keys unknown after apply
       Fixed with data.aws_availability_zone lookup at plan time
+
+    unknown flag: --api-key
+      Confluent CLI uses context-based auth, not inline flags
+      Fixed in phase2.sh with confluent api-key store/use
 
 ## Secrets Management
 
@@ -323,6 +276,7 @@ For CI/CD:
       git clone git@github.com:vj-beep/CFLT-Terraform.git
       cd CFLT-Terraform
       bash scripts/cloud9_setup.sh
+      confluent login
       # Copy scripts/phase2.env from Mac
       bash scripts/phase2.sh
       bash scripts/test_replication.sh
