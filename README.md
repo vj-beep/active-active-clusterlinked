@@ -6,7 +6,7 @@ AWS networking and a Cloud9 workstation.
 
 ## Architecture
 
-![Multi-Region Active-Active Kafka Architecture](architecture.png)
+![Multi-Region Active-Active Kafka Architecture](architecture.svg)
 
 ## Two-Phase Deployment
 

@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1400" font-family="Arial, sans-serif" font-size="12">
+  <rect width="1200" height="1400" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="600" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">Multi-Region Active-Active Kafka on Confluent Cloud</text>
+  <text x="600" y="50" text-anchor="middle" font-size="13" fill="#666">AWS PrivateLink + Bidirectional Cluster Linking</text>
+
+  <!-- ============================================ -->
+  <!-- CONFLUENT CLOUD LAYER -->
+  <!-- ============================================ -->
+  <rect x="20" y="65" width="1160" height="420" fill="#e8f0fe" stroke="#1a73e8" stroke-width="2" rx="10"/>
+  <text x="600" y="90" text-anchor="middle" font-size="17" font-weight="bold" fill="#1a73e8">Confluent Cloud</text>
+  <text x="600" y="108" text-anchor="middle" font-size="12" fill="#555">Environment: vj-aa-linkedpl | Schema Registry (auto-provisioned)</text>
+
+  <!-- East Cluster -->
+  <rect x="40" y="120" width="520" height="345" fill="#c8e6ff" stroke="#1a73e8" stroke-width="1.5" rx="8"/>
+  <text x="300" y="142" text-anchor="middle" font-size="15" font-weight="bold" fill="#0d47a1">East Cluster (core-app-east)</text>
+  <text x="300" y="158" text-anchor="middle" font-size="11" fill="#555">DEDICATED | 1 CKU | us-east-1 | SINGLE_ZONE</text>
+
+  <!-- East Topics -->
+  <rect x="60" y="170" width="200" height="55" fill="#fff" stroke="#1a73e8" stroke-width="1" rx="4"/>
+  <text x="160" y="188" text-anchor="middle" font-size="11" font-weight="bold" fill="#0d47a1">Source Topic</text>
+  <text x="160" y="215" text-anchor="middle" font-size="13" fill="#333">orders_east (3 partitions)</text>
+
+  <rect x="60" y="235" width="200" height="55" fill="#fff3e0" stroke="#e65100" stroke-width="1" stroke-dasharray="4,2" rx="4"/>
+  <text x="160" y="253" text-anchor="middle" font-size="11" font-weight="bold" fill="#e65100">Mirror Topic (read-only)</text>
+  <text x="160" y="280" text-anchor="middle" font-size="13" fill="#e65100">orders_west</text>
+
+  <!-- East RBAC -->
+  <rect x="280" y="170" width="260" height="120" fill="#e3f2fd" stroke="#90caf9" stroke-width="1" rx="4"/>
+  <text x="410" y="188" text-anchor="middle" font-size="11" font-weight="bold" fill="#0d47a1">RBAC &amp; API Keys</text>
+  <text x="290" y="207" font-size="10" fill="#333">svc_link     → EnvironmentAdmin</text>
+  <text x="290" y="222" font-size="10" fill="#333">app_manager  → CloudClusterAdmin</text>
+  <text x="290" y="237" font-size="10" fill="#333">app_producer → DeveloperWrite /topic=orders_east</text>
+  <text x="290" y="252" font-size="10" fill="#333">app_consumer → DeveloperRead  /topic=orders_east</text>
+  <text x="290" y="267" font-size="10" fill="#333">app_consumer → DeveloperRead  /group=orders-consumer</text>
+  <text x="290" y="282" font-size="10" fill="#888">4 API Keys (disable_wait_for_ready=true)</text>
+
+  <!-- East Network -->
+  <rect x="60" y="300" width="220" height="50" fill="#e8f5e9" stroke="#4caf50" stroke-width="1" rx="4"/>
+  <text x="170" y="318" text-anchor="middle" font-size="11" font-weight="bold" fill="#2e7d32">PrivateLink Network (East)</text>
+  <text x="170" y="340" text-anchor="middle" font-size="10" fill="#555">zones: use1-az2, use1-az4, use1-az6</text>
+
+  <rect x="300" y="300" width="240" height="50" fill="#e8f5e9" stroke="#4caf50" stroke-width="1" rx="4"/>
+  <text x="420" y="318" text-anchor="middle" font-size="11" font-weight="bold" fill="#2e7d32">Network Link Service (East)</text>
+  <text x="420" y="340" text-anchor="middle" font-size="10" fill="#555">Accepts: West Network</text>
+
+  <rect x="60" y="360" width="220" height="35" fill="#fce4ec" stroke="#e91e63" stroke-width="1" rx="4"/>
+  <text x="170" y="382" text-anchor="middle" font-size="10" fill="#880e4f">PrivateLink Access Grant (AWS Account)</text>
+
+  <text x="300" y="420" text-anchor="middle" font-size="10" fill="#1a73e8">Network Link Endpoint (West→East)</text>
+  <line x1="300" y1="425" x2="300" y2="465" stroke="#1a73e8" stroke-width="1.5" stroke-dasharray="3,2"/>
+
+  <!-- West Cluster -->
+  <rect x="640" y="120" width="520" height="345" fill="#c8e6ff" stroke="#1a73e8" stroke-width="1.5" rx="8"/>
+  <text x="900" y="142" text-anchor="middle" font-size="15" font-weight="bold" fill="#0d47a1">West Cluster (core-app-west)</text>
+  <text x="900" y="158" text-anchor="middle" font-size="11" fill="#555">DEDICATED | 1 CKU | us-west-2 | SINGLE_ZONE</text>
+
+  <!-- West Topics -->
+  <rect x="940" y="170" width="200" height="55" fill="#fff3e0" stroke="#e65100" stroke-width="1" stroke-dasharray="4,2" rx="4"/>
+  <text x="1040" y="188" text-anchor="middle" font-size="11" font-weight="bold" fill="#e65100">Mirror Topic (read-only)</text>
+  <text x="1040" y="215" text-anchor="middle" font-size="13" fill="#e65100">orders_east</text>
+
+  <rect x="940" y="235" width="200" height="55" fill="#fff" stroke="#1a73e8" stroke-width="1" rx="4"/>
+  <text x="1040" y="253" text-anchor="middle" font-size="11" font-weight="bold" fill="#0d47a1">Source Topic</text>
+  <text x="1040" y="280" text-anchor="middle" font-size="13" fill="#333">orders_west (3 partitions)</text>
+
+  <!-- West RBAC -->
+  <rect x="660" y="170" width="260" height="120" fill="#e3f2fd" stroke="#90caf9" stroke-width="1" rx="4"/>
+  <text x="790" y="188" text-anchor="middle" font-size="11" font-weight="bold" fill="#0d47a1">RBAC &amp; API Keys</text>
+  <text x="670" y="207" font-size="10" fill="#333">svc_link     → EnvironmentAdmin</text>
+  <text x="670" y="222" font-size="10" fill="#333">app_manager  → CloudClusterAdmin</text>
+  <text x="670" y="237" font-size="10" fill="#333">app_producer → DeveloperWrite /topic=orders_west</text>
+  <text x="670" y="252" font-size="10" fill="#333">app_consumer → DeveloperRead  /topic=orders_west</text>
+  <text x="670" y="267" font-size="10" fill="#333">app_consumer → DeveloperRead  /group=orders-consumer</text>
+  <text x="670" y="282" font-size="10" fill="#888">4 API Keys (disable_wait_for_ready=true)</text>
+
+  <!-- West Network -->
+  <rect x="920" y="300" width="220" height="50" fill="#e8f5e9" stroke="#4caf50" stroke-width="1" rx="4"/>
+  <text x="1030" y="318" text-anchor="middle" font-size="11" font-weight="bold" fill="#2e7d32">PrivateLink Network (West)</text>
+  <text x="1030" y="340" text-anchor="middle" font-size="10" fill="#555">zones: usw2-az1, usw2-az2, usw2-az3</text>
+
+  <rect x="660" y="300" width="240" height="50" fill="#e8f5e9" stroke="#4caf50" stroke-width="1" rx="4"/>
+  <text x="780" y="318" text-anchor="middle" font-size="11" font-weight="bold" fill="#2e7d32">Network Link Service (West)</text>
+  <text x="780" y="340" text-anchor="middle" font-size="10" fill="#555">Accepts: East Network</text>
+
+  <rect x="920" y="360" width="220" height="35" fill="#fce4ec" stroke="#e91e63" stroke-width="1" rx="4"/>
+  <text x="1030" y="382" text-anchor="middle" font-size="10" fill="#880e4f">PrivateLink Access Grant (AWS Account)</text>
+
+  <text x="900" y="420" text-anchor="middle" font-size="10" fill="#1a73e8">Network Link Endpoint (East→West)</text>
+  <line x1="900" y1="425" x2="900" y2="465" stroke="#1a73e8" stroke-width="1.5" stroke-dasharray="3,2"/>
+
+  <!-- Cluster Link arrows -->
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#1a73e8"/></marker>
+    <marker id="al" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto"><path d="M8,0 L0,3 L8,6" fill="#1a73e8"/></marker>
+    <marker id="aor" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#e65100"/></marker>
+    <marker id="aol" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto"><path d="M8,0 L0,3 L8,6" fill="#e65100"/></marker>
+  </defs>
+
+  <!-- CL arrows between clusters -->
+  <line x1="560" y1="140" x2="640" y2="140" stroke="#1a73e8" stroke-width="2.5" marker-end="url(#ar)"/>
+  <line x1="640" y1="152" x2="560" y2="152" stroke="#1a73e8" stroke-width="2.5" marker-end="url(#al)"/>
+  <text x="600" y="135" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a73e8">Cluster Links</text>
+
+  <!-- Mirror flow arrows -->
+  <line x1="260" y1="197" x2="935" y2="197" stroke="#e65100" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#aor)"/>
+  <text x="600" y="193" text-anchor="middle" font-size="9" font-weight="bold" fill="#e65100">vj-aa-east-to-west (mirror orders_east)</text>
+  <line x1="935" y1="262" x2="260" y2="262" stroke="#e65100" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#aol)"/>
+  <text x="600" y="258" text-anchor="middle" font-size="9" font-weight="bold" fill="#e65100">vj-aa-west-to-east (mirror orders_west)</text>
+
+  <!-- ============================================ -->
+  <!-- AWS LAYER -->
+  <!-- ============================================ -->
+  <rect x="20" y="500" width="1160" height="470" fill="#fff3e0" stroke="#e65100" stroke-width="2" rx="10"/>
+  <text x="600" y="525" text-anchor="middle" font-size="17" font-weight="bold" fill="#e65100">AWS Account</text>
+
+  <!-- East VPC -->
+  <rect x="40" y="540" width="520" height="410" fill="#ffe0b2" stroke="#e65100" stroke-width="1.5" rx="8"/>
+  <text x="300" y="562" text-anchor="middle" font-size="15" font-weight="bold" fill="#bf360c">East VPC</text>
+  <text x="300" y="578" text-anchor="middle" font-size="11" fill="#555">10.0.0.0/16 | us-east-1</text>
+
+  <!-- East Subnets -->
+  <rect x="60" y="590" width="230" height="45" fill="#fff" stroke="#888" stroke-width="1" rx="4"/>
+  <text x="175" y="608" text-anchor="middle" font-size="10" font-weight="bold" fill="#333">3 Public Subnets</text>
+  <text x="175" y="625" text-anchor="middle" font-size="9" fill="#555">10.0.1.0/24, 10.0.2.0/24, 10.0.3.0/24</text>
+
+  <rect x="60" y="645" width="230" height="45" fill="#fff" stroke="#888" stroke-width="1" rx="4"/>
+  <text x="175" y="663" text-anchor="middle" font-size="10" font-weight="bold" fill="#333">3 Private Subnets</text>
+  <text x="175" y="680" text-anchor="middle" font-size="9" fill="#555">10.0.11.0/24, 10.0.12.0/24, 10.0.13.0/24</text>
+
+  <!-- East Networking -->
+  <rect x="310" y="590" width="110" height="30" fill="#fff" stroke="#4caf50" stroke-width="1" rx="4"/>
+  <text x="365" y="610" text-anchor="middle" font-size="10" fill="#2e7d32">Internet GW</text>
+  <rect x="430" y="590" width="110" height="30" fill="#fff" stroke="#4caf50" stroke-width="1" rx="4"/>
+  <text x="485" y="610" text-anchor="middle" font-size="10" fill="#2e7d32">NAT GW (AZ-a)</text>
+  <rect x="310" y="630" width="110" height="30" fill="#fff" stroke="#888" stroke-width="1" rx="4"/>
+  <text x="365" y="650" text-anchor="middle" font-size="9" fill="#555">Public RT</text>
+  <rect x="430" y="630" width="110" height="30" fill="#fff" stroke="#888" stroke-width="1" rx="4"/>
+  <text x="485" y="650" text-anchor="middle" font-size="9" fill="#555">Private RT</text>
+
+  <!-- East PrivateLink -->
+  <rect x="60" y="700" width="230" height="60" fill="#e8f5e9" stroke="#4caf50" stroke-width="1" rx="4"/>
+  <text x="175" y="718" text-anchor="middle" font-size="10" font-weight="bold" fill="#2e7d32">PrivateLink VPC Endpoint</text>
+  <text x="175" y="733" text-anchor="middle" font-size="9" fill="#555">SG: TCP 80, 443, 9092 from 10.0.0.0/16</text>
+  <text x="175" y="748" text-anchor="middle" font-size="9" fill="#555">Interface type, 3 ENIs in private subnets</text>
+
+  <!-- East Route53 -->
+  <rect x="310" y="700" width="230" height="60" fill="#e8eaf6" stroke="#5c6bc0" stroke-width="1" rx="4"/>
+  <text x="425" y="718" text-anchor="middle" font-size="10" font-weight="bold" fill="#283593">Route53 Private Hosted Zone</text>
+  <text x="425" y="733" text-anchor="middle" font-size="9" fill="#555">*.domain CNAME → VPC Endpoint DNS</text>
+  <text x="425" y="748" text-anchor="middle" font-size="9" fill="#555">Per-AZ zonal CNAME records</text>
+
+  <!-- East Cloud9 -->
+  <rect x="60" y="775" width="480" height="80" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5" rx="4"/>
+  <text x="300" y="793" text-anchor="middle" font-size="12" font-weight="bold" fill="#f57f17">Cloud9 Workstation (SSM)</text>
+  <text x="300" y="810" text-anchor="middle" font-size="10" fill="#555">Private subnet AZ-a | t3.small | Amazon Linux 2023 | 30min auto-stop</text>
+  <text x="300" y="825" text-anchor="middle" font-size="10" fill="#555">3 SSM Endpoints (ssm, ssmmessages, ec2messages) | Cross-VPC SG | IAM Profile</text>
+  <text x="300" y="840" text-anchor="middle" font-size="10" fill="#555">Egress: East CIDR + West CIDR + HTTPS 0.0.0.0/0</text>
+
+  <!-- East DNS Association -->
+  <rect x="60" y="865" width="480" height="30" fill="#e8eaf6" stroke="#5c6bc0" stroke-width="1" rx="4"/>
+  <text x="300" y="885" text-anchor="middle" font-size="10" fill="#283593">Route53 Zone Association: West PL Zone → East VPC (Cloud9 resolves West endpoints)</text>
+
+  <!-- West VPC -->
+  <rect x="640" y="540" width="520" height="410" fill="#ffe0b2" stroke="#e65100" stroke-width="1.5" rx="8"/>
+  <text x="900" y="562" text-anchor="middle" font-size="15" font-weight="bold" fill="#bf360c">West VPC</text>
+  <text x="900" y="578" text-anchor="middle" font-size="11" fill="#555">10.1.0.0/16 | us-west-2</text>
+
+  <!-- West Subnets -->
+  <rect x="660" y="590" width="230" height="45" fill="#fff" stroke="#888" stroke-width="1" rx="4"/>
+  <text x="775" y="608" text-anchor="middle" font-size="10" font-weight="bold" fill="#333">3 Public Subnets</text>
+  <text x="775" y="625" text-anchor="middle" font-size="9" fill="#555">10.1.1.0/24, 10.1.2.0/24, 10.1.3.0/24</text>
+
+  <rect x="660" y="645" width="230" height="45" fill="#fff" stroke="#888" stroke-width="1" rx="4"/>
+  <text x="775" y="663" text-anchor="middle" font-size="10" font-weight="bold" fill="#333">3 Private Subnets</text>
+  <text x="775" y="680" text-anchor="middle" font-size="9" fill="#555">10.1.11.0/24, 10.1.12.0/24, 10.1.13.0/24</text>
+
+  <!-- West Networking -->
+  <rect x="910" y="590" width="110" height="30" fill="#fff" stroke="#4caf50" stroke-width="1" rx="4"/>
+  <text x="965" y="610" text-anchor="middle" font-size="10" fill="#2e7d32">Internet GW</text>
+  <rect x="1030" y="590" width="110" height="30" fill="#fff" stroke="#4caf50" stroke-width="1" rx="4"/>
+  <text x="1085" y="610" text-anchor="middle" font-size="10" fill="#2e7d32">NAT GW (AZ-a)</text>
+  <rect x="910" y="630" width="110" height="30" fill="#fff" stroke="#888" stroke-width="1" rx="4"/>
+  <text x="965" y="650" text-anchor="middle" font-size="9" fill="#555">Public RT</text>
+  <rect x="1030" y="630" width="110" height="30" fill="#fff" stroke="#888" stroke-width="1" rx="4"/>
+  <text x="1085" y="650" text-anchor="middle" font-size="9" fill="#555">Private RT</text>
+
+  <!-- West PrivateLink -->
+  <rect x="660" y="700" width="230" height="60" fill="#e8f5e9" stroke="#4caf50" stroke-width="1" rx="4"/>
+  <text x="775" y="718" text-anchor="middle" font-size="10" font-weight="bold" fill="#2e7d32">PrivateLink VPC Endpoint</text>
+  <text x="775" y="733" text-anchor="middle" font-size="9" fill="#555">SG: TCP 80, 443, 9092 from 10.1.0.0/16</text>
+  <text x="775" y="748" text-anchor="middle" font-size="9" fill="#e65100">+ East CIDR (10.0.0.0/16) on 443, 9092</text>
+
+  <!-- West Route53 -->
+  <rect x="910" y="700" width="230" height="60" fill="#e8eaf6" stroke="#5c6bc0" stroke-width="1" rx="4"/>
+  <text x="1025" y="718" text-anchor="middle" font-size="10" font-weight="bold" fill="#283593">Route53 Private Hosted Zone</text>
+  <text x="1025" y="733" text-anchor="middle" font-size="9" fill="#555">*.domain CNAME → VPC Endpoint DNS</text>
+  <text x="1025" y="748" text-anchor="middle" font-size="9" fill="#555">Per-AZ zonal CNAME records</text>
+
+  <!-- West DNS Association -->
+  <rect x="660" y="775" width="480" height="30" fill="#e8eaf6" stroke="#5c6bc0" stroke-width="1" rx="4"/>
+  <text x="900" y="795" text-anchor="middle" font-size="10" fill="#283593">Route53 Zone Association: East PL Zone → West VPC</text>
+
+  <!-- VPC Peering -->
+  <line x1="560" y1="720" x2="640" y2="720" stroke="#e65100" stroke-width="2.5" marker-end="url(#aor)"/>
+  <line x1="640" y1="735" x2="560" y2="735" stroke="#e65100" stroke-width="2.5" marker-end="url(#aol)"/>
+  <rect x="565" y="700" width="70" height="18" fill="#fff3e0" stroke="#e65100" stroke-width="1" rx="3"/>
+  <text x="600" y="713" text-anchor="middle" font-size="9" font-weight="bold" fill="#e65100">VPC Peering</text>
+  <text x="600" y="755" text-anchor="middle" font-size="9" fill="#888">DNS Resolution Enabled</text>
+  <text x="600" y="768" text-anchor="middle" font-size="9" fill="#888">4 Cross-Region Routes</text>
+
+  <!-- PrivateLink vertical lines -->
+  <line x1="175" y1="465" x2="175" y2="700" stroke="#4caf50" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="140" y="585" text-anchor="middle" font-size="9" font-weight="bold" fill="#4caf50" transform="rotate(-90, 140, 585)">PrivateLink</text>
+
+  <line x1="775" y1="465" x2="775" y2="700" stroke="#4caf50" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="810" y="585" text-anchor="middle" font-size="9" font-weight="bold" fill="#4caf50" transform="rotate(-90, 810, 585)">PrivateLink</text>
+
+  <!-- ============================================ -->
+  <!-- EXECUTION PHASES -->
+  <!-- ============================================ -->
+
+  <!-- Phase 1 -->
+  <rect x="20" y="990" width="560" height="390" fill="#e8f5e9" stroke="#4caf50" stroke-width="2" rx="10"/>
+  <rect x="20" y="990" width="560" height="35" fill="#4caf50" rx="10"/>
+  <rect x="20" y="1010" width="560" height="15" fill="#4caf50"/>
+  <text x="300" y="1013" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff">Phase 1: From Your Mac (~35 min)</text>
+  <text x="300" y="1040" text-anchor="middle" font-size="11" fill="#2e7d32">terraform init &amp;&amp; terraform apply</text>
+
+  <text x="40" y="1065" font-size="11" fill="#333" font-weight="bold">Resources created (in order):</text>
+  <text x="50" y="1085" font-size="11" fill="#333"> 1. VPCs + 12 Subnets + 2 IGWs + 2 NATs + 4 Route Tables</text>
+  <text x="50" y="1103" font-size="11" fill="#333"> 2. VPC Peering + 4 Cross-Region Routes + DNS Resolution</text>
+  <text x="50" y="1121" font-size="11" fill="#333"> 3. 3 SSM Endpoints + Cloud9 + Cross-VPC SG + IAM Profile</text>
+  <text x="50" y="1139" font-size="11" fill="#333"> 4. Confluent Environment + 2 Networks + 2 PL Access Grants</text>
+  <text x="50" y="1157" font-size="11" fill="#333"> 5. 2 DEDICATED Kafka Clusters (1 CKU each, ~25 min)</text>
+  <text x="50" y="1175" font-size="11" fill="#333"> 6. 2 PrivateLink VPC Endpoints + 2 SGs + Route53 Zones + DNS</text>
+  <text x="50" y="1193" font-size="11" fill="#333"> 7. 2 Route53 Zone Associations (cross-region DNS)</text>
+  <text x="50" y="1211" font-size="11" fill="#333"> 8. 4 Network Links (2 services + 2 endpoints)</text>
+  <text x="50" y="1229" font-size="11" fill="#333"> 9. 4 Service Accounts + 8 RBAC Bindings + 60s Sleep</text>
+  <text x="50" y="1247" font-size="11" fill="#333">10. 10 API Keys (disable_wait_for_ready=true)</text>
+
+  <rect x="50" y="1265" width="510" height="30" fill="#c8e6c9" stroke="#4caf50" stroke-width="1" rx="4"/>
+  <text x="300" y="1285" text-anchor="middle" font-size="12" font-weight="bold" fill="#2e7d32">~107 resources via Terraform (public API)</text>
+
+  <text x="300" y="1315" text-anchor="middle" font-size="11" fill="#555">After apply: terraform output -raw phase2_env > ../scripts/phase2.env</text>
+
+  <rect x="50" y="1330" width="510" height="35" fill="#fff" stroke="#f9a825" stroke-width="1.5" rx="4"/>
+  <text x="300" y="1348" text-anchor="middle" font-size="11" fill="#f57f17">Output: cloud9_url, cluster IDs, API keys, phase2.env (all values for Phase 2)</text>
+
+  <!-- Phase 2 -->
+  <rect x="620" y="990" width="560" height="390" fill="#e3f2fd" stroke="#1a73e8" stroke-width="2" rx="10"/>
+  <rect x="620" y="990" width="560" height="35" fill="#1a73e8" rx="10"/>
+  <rect x="620" y="1010" width="560" height="15" fill="#1a73e8"/>
+  <text x="900" y="1013" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff">Phase 2: From Cloud9 (~2 min)</text>
+  <text x="900" y="1040" text-anchor="middle" font-size="11" fill="#1565c0">bash scripts/phase2.sh (Confluent CLI)</text>
+
+  <text x="640" y="1065" font-size="11" fill="#333" font-weight="bold">Setup (one-time):</text>
+  <text x="650" y="1085" font-size="11" fill="#333"> 1. Open Cloud9 IDE (URL from Phase 1 output)</text>
+  <text x="650" y="1103" font-size="11" fill="#333"> 2. bash scripts/cloud9_setup.sh</text>
+  <text x="650" y="1121" font-size="11" fill="#888">    → Disables managed credentials</text>
+  <text x="650" y="1139" font-size="11" fill="#888">    → Installs Terraform + Confluent CLI + jq</text>
+  <text x="650" y="1157" font-size="11" fill="#333"> 3. confluent login</text>
+  <text x="650" y="1175" font-size="11" fill="#333"> 4. Copy scripts/phase2.env from Mac</text>
+
+  <text x="640" y="1200" font-size="11" fill="#333" font-weight="bold">Resources created:</text>
+  <text x="650" y="1220" font-size="11" fill="#333"> 1. Topic: orders_east (East cluster, 3 partitions)</text>
+  <text x="650" y="1238" font-size="11" fill="#333"> 2. Topic: orders_west (West cluster, 3 partitions)</text>
+  <text x="650" y="1256" font-size="11" fill="#333"> 3. Cluster Link: vj-aa-east-to-west</text>
+  <text x="650" y="1274" font-size="11" fill="#333"> 4. Cluster Link: vj-aa-west-to-east</text>
+  <text x="650" y="1292" font-size="11" fill="#333"> 5. Mirror Topic: orders_east on West (read-only)</text>
+  <text x="650" y="1310" font-size="11" fill="#333"> 6. Mirror Topic: orders_west on East (read-only)</text>
+
+  <rect x="650" y="1325" width="510" height="30" fill="#bbdefb" stroke="#1a73e8" stroke-width="1" rx="4"/>
+  <text x="900" y="1345" text-anchor="middle" font-size="12" font-weight="bold" fill="#1565c0">6 resources via Confluent CLI (PrivateLink access)</text>
+
+  <!-- Arrow from Cloud9 to Phase 2 -->
+  <line x1="540" y1="855" x2="900" y2="990" stroke="#f9a825" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#ar)"/>
+  <text x="750" y="910" text-anchor="middle" font-size="10" font-weight="bold" fill="#f57f17">Cloud9 runs Phase 2</text>
+  <text x="750" y="925" text-anchor="middle" font-size="9" fill="#888">(inside VPC, PrivateLink access)</text>
+
+</svg>
