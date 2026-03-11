@@ -3,9 +3,10 @@ set -e
 
 # ──────────────────────────────────────────
 # Load variables from phase2.env
-# Generate this file from phase1:
+# Generate this file from phase1 (on your local mac where you run phase1)
 #   cd phase1
 #   terraform output -raw phase2_env > ../scripts/phase2.env
+# copy contents of phase2.env into c9 phase2/phase2.env file
 # ──────────────────────────────────────────
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
