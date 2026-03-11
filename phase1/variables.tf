@@ -41,7 +41,7 @@ variable "cloud9_instance_type" {
 variable "cloud9_disable_managed_creds" {
   description = "Set to false to skip disabling Cloud9 managed credentials via Terraform"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "west_private_hosted_zone_ids" {
