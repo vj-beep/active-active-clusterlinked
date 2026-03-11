@@ -87,8 +87,8 @@ Step 1 - Open Cloud9:
 
 Step 2 - In Cloud9 terminal, clone the repo:
 
-    git clone git@github.com:vj-beep/CFLT-Terraform.git
-    cd CFLT-Terraform
+    git clone git@github.com:vj-beep/active-active-clusterlinked.git
+    cd active-active-clusterlinked
 
 Step 3 - Install tools and disable managed credentials (first time only):
 
@@ -273,8 +273,8 @@ For CI/CD:
 
     PHASE 2 - Cloud9 (~2 min)
       # Open Cloud9 (URL from: terraform output cloud9_url)
-      git clone git@github.com:vj-beep/CFLT-Terraform.git
-      cd CFLT-Terraform
+      git clone https://github.com/vj-beep/active-active-clusterlinked.git
+      cd active-active-clusterlinked
       bash scripts/cloud9_setup.sh
       confluent login
       # Copy scripts/phase2.env from Mac

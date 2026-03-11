@@ -122,13 +122,3 @@ resource "aws_network_interface_sg_attachment" "cloud9" {
   security_group_id    = aws_security_group.cloud9.id
   network_interface_id = data.aws_instance.cloud9.network_interface_id
 }
-
-resource "null_resource" "resize_disk" {
-  count = var.cloud9_disk_size != null ? 1 : 0
-
-  provisioner "local-exec" {
-    command = "/bin/bash ${path.module}/scripts/resize_disk.sh ${data.aws_instance.cloud9.id} ${var.region_east} ${var.cloud9_disk_size}"
-  }
-
-  depends_on = [time_sleep.wait_for_cloud9_instance]
-}
