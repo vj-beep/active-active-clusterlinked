@@ -2,12 +2,12 @@
 # NEVER commit terraform.tfvars to version control.
 
 # AWS
-vpc_name_east    = "east"
-vpc_name_west    = "west"
-vpc_tag          = "confluent-demo"
+vpc_name_east    = "aa-mr-pl-demo-east"
+vpc_name_west    = "aa-mr-pl-demo-west"
+vpc_tag          = "aa-mr-pl-demo"
 
 # Cloud9
-cloud9_name      = "workstation"
+cloud9_name      = "aa-mr-pl-demo-jumpbox"
 # update with the AWS pricipal you log into the console with
 cloud9_owner_arn = "arn:aws:sts::123456789012:assumed-role/YourRole/user@example.com"
 cloud9_disk_size = 500
@@ -21,11 +21,12 @@ confluent_cloud_api_secret = ""
 # Get account ID: aws sts get-caller-identity --query Account --output text
 aws_account_id             = "123456789012"
 
+environment_name     = "aa-mr-pl-demo-env"
+
 # Kafka Clusters
 cluster_type         = "DEDICATED"
 cluster_name_east    = "core-app-east"
 cluster_name_west    = "core-app-west"
-environment_name     = "vj-aa-linkedpl"
 cluster_availability = "SINGLE_ZONE"
 cluster_cku          = 1
 
