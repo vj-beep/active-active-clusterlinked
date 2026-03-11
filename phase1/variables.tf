@@ -28,10 +28,6 @@ variable "cloud9_owner_arn" {
   type = string
 }
 
-variable "cloud9_iam_role" {
-  type = string
-}
-
 variable "cloud9_disk_size" {
   type    = number
   default = null
@@ -40,6 +36,12 @@ variable "cloud9_disk_size" {
 variable "cloud9_instance_type" {
   type    = string
   default = "t3.small"
+}
+
+variable "cloud9_disable_managed_creds" {
+  description = "Set to false to skip disabling Cloud9 managed credentials via Terraform"
+  type        = bool
+  default     = true
 }
 
 variable "west_private_hosted_zone_ids" {
@@ -132,10 +134,4 @@ variable "zones_east" {
 variable "zones_west" {
   type    = list(string)
   default = ["usw2-az1", "usw2-az2", "usw2-az3"]
-}
-
-variable "cloud9_disable_managed_creds" {
-  description = "Set to false to skip disabling Cloud9 managed credentials"
-  type        = bool
-  default     = true
 }

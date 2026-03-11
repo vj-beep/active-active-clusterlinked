@@ -31,33 +31,24 @@ resource "confluent_kafka_cluster" "east" {
     for_each = local.is_basic ? [1] : []
     content {}
   }
-
   dynamic "standard" {
     for_each = local.is_standard ? [1] : []
     content {}
   }
-
   dynamic "dedicated" {
     for_each = local.is_dedicated ? [1] : []
-    content {
-      cku = var.cluster_cku
-    }
+    content { cku = var.cluster_cku }
   }
-
   dynamic "enterprise" {
     for_each = local.is_enterprise ? [1] : []
     content {}
   }
 
-  environment {
-    id = confluent_environment.main.id
-  }
+  environment { id = confluent_environment.main.id }
 
   dynamic "network" {
     for_each = local.is_private ? [1] : []
-    content {
-      id = confluent_network.east[0].id
-    }
+    content { id = confluent_network.east[0].id }
   }
 
   depends_on = [confluent_private_link_access.east]
@@ -73,33 +64,24 @@ resource "confluent_kafka_cluster" "west" {
     for_each = local.is_basic ? [1] : []
     content {}
   }
-
   dynamic "standard" {
     for_each = local.is_standard ? [1] : []
     content {}
   }
-
   dynamic "dedicated" {
     for_each = local.is_dedicated ? [1] : []
-    content {
-      cku = var.cluster_cku
-    }
+    content { cku = var.cluster_cku }
   }
-
   dynamic "enterprise" {
     for_each = local.is_enterprise ? [1] : []
     content {}
   }
 
-  environment {
-    id = confluent_environment.main.id
-  }
+  environment { id = confluent_environment.main.id }
 
   dynamic "network" {
     for_each = local.is_private ? [1] : []
-    content {
-      id = confluent_network.west[0].id
-    }
+    content { id = confluent_network.west[0].id }
   }
 
   depends_on = [confluent_private_link_access.west]

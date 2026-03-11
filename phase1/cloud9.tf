@@ -74,7 +74,7 @@ resource "aws_security_group" "cloud9" {
 resource "aws_cloud9_environment_ec2" "this" {
   provider                    = aws.east
   name                        = var.cloud9_name
-  description                 = "Terraform workstation - multi-region demo"
+  description                 = "multi-region demo workstation"
   instance_type               = var.cloud9_instance_type
   image_id                    = "amazonlinux-2023-x86_64"
   connection_type             = "CONNECT_SSM"
@@ -96,7 +96,6 @@ resource "null_resource" "disable_managed_creds" {
   depends_on = [aws_cloud9_environment_ec2.this]
 }
 
-# Wait for Cloud9 EC2 instance to be running
 resource "time_sleep" "wait_for_cloud9_instance" {
   create_duration = "120s"
   depends_on      = [aws_cloud9_environment_ec2.this]
@@ -124,24 +123,6 @@ resource "aws_network_interface_sg_attachment" "cloud9" {
   network_interface_id = data.aws_instance.cloud9.network_interface_id
 }
 
-resource "aws_iam_instance_profile" "cloud9" {
-  provider = aws.east
-  name     = "${var.cloud9_name}-profile"
-  role     = var.cloud9_iam_role
-  tags     = local.all_tags
-}
-
-resource "null_resource" "swap_instance_profile" {
-  provisioner "local-exec" {
-    command = "/bin/bash ${path.module}/scripts/swap_profile.sh ${data.aws_instance.cloud9.id} ${var.region_east} ${aws_iam_instance_profile.cloud9.name}"
-  }
-
-  depends_on = [
-    data.aws_instance.cloud9,
-    aws_iam_instance_profile.cloud9,
-  ]
-}
-
 resource "null_resource" "resize_disk" {
   count = var.cloud9_disk_size != null ? 1 : 0
 
@@ -149,5 +130,5 @@ resource "null_resource" "resize_disk" {
     command = "/bin/bash ${path.module}/scripts/resize_disk.sh ${data.aws_instance.cloud9.id} ${var.region_east} ${var.cloud9_disk_size}"
   }
 
-  depends_on = [null_resource.swap_instance_profile]
+  depends_on = [time_sleep.wait_for_cloud9_instance]
 }
