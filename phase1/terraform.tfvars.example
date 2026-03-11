@@ -9,10 +9,10 @@ vpc_tag          = "aa-mr-pl-demo"
 # Cloud9
 cloud9_name      = "aa-mr-pl-demo-jumpbox"
 # update with the AWS pricipal you log into the console with
+disable_managed_creds = false
 cloud9_owner_arn = "arn:aws:sts::123456789012:assumed-role/YourRole/user@example.com"
 cloud9_disk_size = 500
 # cloud9_instance_type = "t3.small"
-# cloud9_disable_managed_creds = false
 
 # Confluent Cloud
 # Create API key at: https://confluent.cloud/settings/api-keys
